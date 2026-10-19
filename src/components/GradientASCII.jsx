@@ -729,9 +729,18 @@ const GradientASCII = ({
       }
     };
 
+    const isElementHidden = () => {
+      if (!container) return false;
+      if (container.style.visibility === 'hidden') return true;
+      if (container.parentElement && container.parentElement.style.visibility === 'hidden') return true;
+      const section = container.closest('section');
+      if (section && section.style.visibility === 'hidden') return true;
+      return false;
+    };
+
     const frame = now => {
       raf = 0;
-      if (disposed || !visible || document.hidden || settingsRef.current.paused) return;
+      if (disposed || !visible || document.hidden || settingsRef.current.paused || isElementHidden()) return;
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.001, 0.05) : 1 / 60;
       last = now;
@@ -748,12 +757,14 @@ const GradientASCII = ({
       updateInput(dt);
       draw();
       const busy = !reduce || introClock < 1 || clicks.length > 0 || trail.length > 0;
-      if (busy && !settingsRef.current.paused) raf = requestAnimationFrame(frame);
+      if (busy && !settingsRef.current.paused && !isElementHidden()) raf = requestAnimationFrame(frame);
       else last = 0;
     };
 
     function wake() {
-      if (!raf && !disposed && visible && !document.hidden && !settingsRef.current.paused) raf = requestAnimationFrame(frame);
+      if (!raf && !disposed && visible && !document.hidden && !settingsRef.current.paused && !isElementHidden()) {
+        raf = requestAnimationFrame(frame);
+      }
     }
 
     const locate = event => {
@@ -801,6 +812,13 @@ const GradientASCII = ({
       wake();
     };
 
+    const onScroll = () => {
+      if (!raf && !disposed && visible && !document.hidden && !settingsRef.current.paused && !isElementHidden()) {
+        last = 0;
+        wake();
+      }
+    };
+
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(container);
     const intersection = new IntersectionObserver(entries => {
@@ -813,6 +831,7 @@ const GradientASCII = ({
     intersection.observe(container);
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerdown', onPointerDown, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     document.addEventListener('visibilitychange', onVisibility);
     resize();
     wakeRef.current = wake;
@@ -831,6 +850,7 @@ const GradientASCII = ({
       intersection.disconnect();
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('scroll', onScroll);
       document.removeEventListener('visibilitychange', onVisibility);
       [fieldTarget, haloA, haloB].forEach(target => {
         target.textures.forEach(texture => gl.deleteTexture(texture));

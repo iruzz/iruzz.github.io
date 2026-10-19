@@ -540,9 +540,7 @@ export default function Home() {
   const ctaContentRef = useRef<HTMLDivElement>(null);
   const [folderSize, setFolderSize] = useState(2.2);
   const [isMobile, setIsMobile] = useState(false);
-  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const [isCtaVisible, setIsCtaVisible] = useState(false);
-  const isHeroVisibleRef = useRef(true);
   const isCtaVisibleRef = useRef(false);
   const [selectedExperience, setSelectedExperience] = useState<ExperienceItem | null>(null);
   const [isMounted, setIsMounted] = useState(false);
@@ -564,16 +562,6 @@ export default function Home() {
       }
     };
     updateSize();
-
-    // If loaded or restored with existing scroll, synchronize initial Hero visibility
-    if (typeof window !== 'undefined' && window.scrollY > window.innerHeight * 0.95) {
-      isHeroVisibleRef.current = false;
-      setIsHeroVisible(false);
-      if (heroRef.current) {
-        heroRef.current.style.display = 'none';
-      }
-    }
-
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
@@ -606,7 +594,7 @@ export default function Home() {
 
       const mm = gsap.matchMedia(mainRef);
 
-      // ─── 1. MOBILE TIMELINE (<= 768px): snappier scrub, unmount/pause offscreen Hero to completely save GPU ───
+      // ─── 1. MOBILE TIMELINE (<= 768px): snappier scrub, zero layout distortion ───
       mm.add('(max-width: 768px)', () => {
         const entryTl = gsap.timeline({
           scrollTrigger: {
@@ -615,27 +603,9 @@ export default function Home() {
             end: 'top top',
             scrub: 0.25,
             invalidateOnRefresh: true,
-            onLeave: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 0, pointerEvents: 'none', display: 'none' });
-              if (isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = false;
-                setIsHeroVisible(false);
-              }
-            },
-            onEnterBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
-              if (!isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = true;
-                setIsHeroVisible(true);
-              }
-            },
             onLeaveBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto' });
               if (heroContentRef.current) gsap.set(heroContentRef.current, { scale: 1, y: 0, opacity: 1 });
-              if (!isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = true;
-                setIsHeroVisible(true);
-              }
             },
           },
         });
@@ -674,14 +644,14 @@ export default function Home() {
               scrub: 0.25,
               invalidateOnRefresh: true,
               onEnter: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
                 if (!isCtaVisibleRef.current) {
                   isCtaVisibleRef.current = true;
                   setIsCtaVisible(true);
                 }
               },
               onLeaveBack: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
                 if (isCtaVisibleRef.current) {
                   isCtaVisibleRef.current = false;
                   setIsCtaVisible(false);
@@ -690,13 +660,13 @@ export default function Home() {
               onUpdate: (self) => {
                 if (ctaSectionRef.current) {
                   if (self.progress > 0) {
-                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
                     if (!isCtaVisibleRef.current) {
                       isCtaVisibleRef.current = true;
                       setIsCtaVisible(true);
                     }
                   } else {
-                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
                     if (isCtaVisibleRef.current) {
                       isCtaVisibleRef.current = false;
                       setIsCtaVisible(false);
@@ -725,27 +695,9 @@ export default function Home() {
             end: 'top top',
             scrub: 1.2,
             invalidateOnRefresh: true,
-            onLeave: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 0, pointerEvents: 'none', display: 'none' });
-              if (isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = false;
-                setIsHeroVisible(false);
-              }
-            },
-            onEnterBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
-              if (!isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = true;
-                setIsHeroVisible(true);
-              }
-            },
             onLeaveBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto' });
               if (heroContentRef.current) gsap.set(heroContentRef.current, { scale: 1, y: 0, opacity: 1 });
-              if (!isHeroVisibleRef.current) {
-                isHeroVisibleRef.current = true;
-                setIsHeroVisible(true);
-              }
             },
           },
         });
@@ -791,14 +743,14 @@ export default function Home() {
               scrub: 1.2,
               invalidateOnRefresh: true,
               onEnter: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
                 if (!isCtaVisibleRef.current) {
                   isCtaVisibleRef.current = true;
                   setIsCtaVisible(true);
                 }
               },
               onLeaveBack: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
                 if (isCtaVisibleRef.current) {
                   isCtaVisibleRef.current = false;
                   setIsCtaVisible(false);
@@ -807,13 +759,13 @@ export default function Home() {
               onUpdate: (self) => {
                 if (ctaSectionRef.current) {
                   if (self.progress > 0) {
-                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
                     if (!isCtaVisibleRef.current) {
                       isCtaVisibleRef.current = true;
                       setIsCtaVisible(true);
                     }
                   } else {
-                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
                     if (isCtaVisibleRef.current) {
                       isCtaVisibleRef.current = false;
                       setIsCtaVisible(false);
@@ -861,7 +813,12 @@ export default function Home() {
   }, []);
 
   const scrollToAboutSection = () => {
-    orangeSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (orangeSectionRef.current) {
+      window.scrollTo({
+        top: orangeSectionRef.current.offsetTop,
+        behavior: 'smooth',
+      });
+    }
   };
 
   const scrollToSkills = () => {
@@ -1007,7 +964,6 @@ export default function Home() {
             scrambleRadius={0.1}
             clickEffect={isMobile ? "none" : "wave"}
             dpr={isMobile ? 1 : undefined}
-            paused={!isHeroVisible}
             intro
             lightMode={false}
           />
@@ -1580,7 +1536,7 @@ I believe great software is more than just code, it's about solving real problem
         ref={ctaSectionRef}
         id="contact"
         className="fixed inset-0 z-10 w-full h-screen bg-black text-white flex flex-col items-center justify-center overflow-y-auto sm:overflow-hidden py-12 sm:py-20 md:py-24 px-4 sm:px-6 select-none"
-        style={{ visibility: 'hidden', pointerEvents: 'none', display: 'none' }}
+        style={{ visibility: 'hidden', pointerEvents: 'none' }}
       >
         {/* Fullscreen Ambient Gradient ASCII Background - Mounted conditionally to preserve GPU when offscreen */}
         {isCtaVisible && (
