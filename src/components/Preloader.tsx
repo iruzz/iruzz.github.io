@@ -5,12 +5,11 @@ import { motion, useMotionValue, animate } from 'framer-motion';
 
 // Curated architectural & high-fashion default images from Preloader5DOT
 const DEFAULT_IMAGES = [
-  'https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
-  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=1200&auto=format&fit=crop'
+  'loader/load1.jpeg',
+  'loader/load2.jpeg',
+  'loader/load3.jpeg',
+  'loader/load4.jpeg',
+  'loader/load5.jpeg',
 ];
 
 // Luxury Parisian ease curve from Preloader5DOT
