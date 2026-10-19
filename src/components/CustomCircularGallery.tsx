@@ -18,7 +18,6 @@ import {
   ArrowRight01Icon,
   ArrowUpRight01Icon,
   Cancel01Icon,
-  SparklesIcon,
 } from '@hugeicons/core-free-icons';
 import { SiGithub } from 'react-icons/si';
 
@@ -381,12 +380,6 @@ export default function CustomCircularGallery({
           <HugeiconsIcon icon={ArrowRight01Icon} size="1.2em" />
         </motion.button>
       </motion.div>
-
-      {/* Helpful Subtle Interaction Hint */}
-      <div className="flex items-center gap-2 mt-2 mb-4 px-4 py-1.5 rounded-full bg-white/[0.03] border border-white/10 text-white/50 text-xs font-mono">
-        <HugeiconsIcon icon={SparklesIcon} size="1em" className="text-orange-400" />
-        <span>Scroll or drag cards to rotate • Click any project for full details</span>
-      </div>
 
       {/* Project Information Modal Dialog - Mounted directly to document.body via Portal */}
       {isClient &&

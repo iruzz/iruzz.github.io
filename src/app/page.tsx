@@ -11,12 +11,13 @@ import HalftoneReveal from "@/components/HalftoneReveal";
 import TextPressure from '@/components/TextPressure';
 import ProfileCard from "@/components/ProfileCard";
 import ScrambledText from "@/components/ScrambledText";
-import Grainient from "@/components/Grainient";
+import Particles from "@/components/Particles";
 import Dock from '@/components/Dock';
 import LogoLoop from '@/components/LogoLoop';
 import Folder from '@/components/Folder';
 import CustomCircularGallery from '@/components/CustomCircularGallery';
 import BorderGlow from '@/components/BorderGlow';
+import SpecularButton from '@/components/SpecularButton';
 import {
   SiTailwindcss,
   SiJavascript,
@@ -29,14 +30,12 @@ import {
 } from 'react-icons/si';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
-  AiSparklesIcon,
   ArrowUpRight01Icon,
   Award01Icon,
   Briefcase02Icon,
   Calendar03Icon,
   CodeFolderIcon,
   CodeIcon,
-  Database01Icon,
   Delete02Icon,
   Github01Icon,
   Home01Icon,
@@ -131,8 +130,8 @@ const services = [
     badge: 'WEB APPS • ARCHITECTURE',
     icon: CodeIcon,
     description:
-      'Designing & building scalable, reactive web applications with clean component architecture, server-side rendering, and responsive UI across all screens.',
-    tags: ['Next.js', 'React', 'Laravel', 'TypeScript', 'Tailwind CSS'],
+      'Developing fullstack web applications using Laravel, building robust backend systems and responsive user interfaces tailored to business needs.',
+    tags: ['Laravel', 'Mysql', 'API', 'Tailwind CSS'],
   },
   {
     number: '02',
@@ -140,26 +139,17 @@ const services = [
     badge: 'MOTION • INTERACTION',
     icon: PaintBoardIcon,
     description:
-      'Crafting distinctive digital identities with fluid micro-interactions, GSAP timeline choreographies, glassmorphic aesthetics, and seamless responsive layouts.',
-    tags: ['GSAP Motion', 'Figma', 'Tailwind CSS', 'WebGL', 'UI/UX Design'],
+      'Creating modern, responsive websites to showcase products, promote services, and establish a professional brand identity that builds credibility and engages potential customers.',
+    tags: ['GSAP Motion', 'Tailwind CSS', 'React', 'Native'],
   },
   {
     number: '03',
-    title: 'Backend Systems & Cloud APIs',
-    badge: 'API • CLOUD • DEVOPS',
-    icon: Database01Icon,
-    description:
-      'Engineering high-throughput RESTful services, resilient database schemas, automated containerized workflows with Docker, and robust backend pipelines.',
-    tags: ['PHP', 'Laravel', 'Docker', 'MySQL', 'Nginx', 'REST APIs'],
-  },
-  {
-    number: '04',
-    title: 'Mobile Apps & AI Integration',
-    badge: 'MOBILE • INTELLIGENCE',
+    title: 'AI Automation & RAG Chatbot Development',
+    badge: 'Automation • INTELLIGENCE',
     icon: SmartPhone01Icon,
     description:
-      'Developing cross-platform mobile apps with Flutter, coupled with modern AI model integrations (Gemini API, OpenAI) for automated intelligent workflows.',
-    tags: ['Flutter', 'Dart', 'Gemini API', 'Python', 'Firebase'],
+      'Building AI-powered automation workflows and RAG-based chatbots that streamline business processes, deliver intelligent responses from custom knowledge sources, and improve operational efficiency.',
+    tags: ['RAG Chatbot', 'n8n', 'API Integration', 'Python', 'VectorDB'],
   },
 ];
 
@@ -204,7 +194,7 @@ const featuredProjects = [
     liveUrl: 'https://reservasi-hotel-ai-automate.vercel.app/',
     githubUrl: 'https://reservasi-hotel-ai-automate.vercel.app/',
   },
-  
+
 ];
 
 interface ExperienceItem {
@@ -227,13 +217,13 @@ interface ExperienceItem {
 
 const experiences: ExperienceItem[] = [
   {
-    role: 'Frontend Developer',
-    company: 'Interactive Web Solutions',
-    period: '2023 — 2024',
-    type: 'Web Application & UI',
-    logo: '/logos/company2.svg',
+    role: 'Freelance Web Developer',
+    company: 'Freelancer',
+    period: '2025 — Present',
+    type: 'Web Application System',
+    logo: '/logos/free.jpeg',
     description:
-      'Engineered interactive user interfaces, component-driven layouts, and dynamic micro-animations. Focused on performance optimization, responsive layouts across devices, and clean component structures.',
+      'Working as a Freelance Fullstack Developer, building tailored web solutions ranging from management systems like SIKAS to modern landing pages and company profile websites. Focused on delivering functional, scalable, and user-centered digital experiences that meet each client`s needs.',
     technologies: ['JavaScript', 'Tailwind CSS', 'GSAP', 'HTML5/CSS3', 'Git', 'UI/UX'],
     project: {
       name: 'Interactive UI System',
@@ -254,21 +244,38 @@ const experiences: ExperienceItem[] = [
       url: 'https://dokuflow.cmhgroup.id/',
     },
   },
-  {
-    role: 'Backend & Database Engineer',
-    company: 'Web Systems & Services',
-    period: '2022 — 2023',
-    type: 'System Development',
-    logo: '/logos/company3.svg',
-    description:
-      'Developed server-side logic, authentication pipelines, and database architectures using PHP and Laravel. Containerized environments using Docker and managed data queries with MySQL.',
-    technologies: ['PHP', 'Laravel', 'MySQL', 'Python', 'Docker', 'REST APIs'],
-    project: {
-      name: 'Database & API Engine',
-      url: 'https://github.com/iruzcodes',
-    },
-  },
 ];
+
+function ExperienceLogo({ src, alt }: { src: string; alt: string }) {
+  const [isSquare, setIsSquare] = useState<boolean>(() => {
+    return /\.(jpe?g)$/i.test(src) || src.includes('free');
+  });
+
+  return (
+    <div
+      className={`relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center ${
+        isSquare ? 'rounded-full overflow-hidden' : ''
+      }`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={48}
+        height={48}
+        onLoad={(e) => {
+          const img = e.currentTarget;
+          if (img.naturalWidth && img.naturalHeight) {
+            const ratio = img.naturalWidth / img.naturalHeight;
+            setIsSquare(ratio >= 0.85 && ratio <= 1.15);
+          }
+        }}
+        className={`w-full h-full pointer-events-none ${
+          isSquare ? 'object-cover rounded-full' : 'object-contain'
+        }`}
+      />
+    </div>
+  );
+}
 
 const experienceFolderItems = experiences.map((exp, index) => {
   const projectList = exp.projects || (exp.project ? [exp.project] : []);
@@ -281,15 +288,7 @@ const experienceFolderItems = experiences.map((exp, index) => {
           {/* Top Header: Company Logo, Role & Period */}
           <div className="flex items-start justify-between gap-3 mb-2.5">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-neutral-100/90 border border-neutral-200 p-2 flex items-center justify-center shadow-xs">
-                <Image
-                  src={exp.logo}
-                  alt={`${exp.company} logo`}
-                  width={48}
-                  height={48}
-                  className="w-full h-full object-contain pointer-events-none"
-                />
-              </div>
+              <ExperienceLogo src={exp.logo} alt={`${exp.company} logo`} />
               <div className="min-w-0">
                 <h4 className="font-montserrat font-bold text-sm sm:text-base text-neutral-900 leading-tight">
                   {exp.role}
@@ -306,7 +305,7 @@ const experienceFolderItems = experiences.map((exp, index) => {
 
           {/* Period & Type Badges */}
           <div className="flex flex-wrap items-center gap-2 mb-3">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-50 text-orange-700 border border-orange-200/80">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-50 text-orange-700 border ">
               <HugeiconsIcon icon={Calendar03Icon} size="1.05em" />
               {exp.period}
             </div>
@@ -386,37 +385,34 @@ const experienceFolderItems = experiences.map((exp, index) => {
 
 const educations = [
   {
-    degree: 'Bachelor of Computer Science (Informatics)',
-    institution: 'University / Institute of Technology',
-    period: '2020 — 2024',
-    location: 'Indonesia',
-  },
-  {
     degree: 'Software Engineering (RPL)',
     institution: 'Vocational High School',
-    period: '2017 — 2020',
+    period: '2024 — Present',
     location: 'Indonesia',
   },
 ];
 
 const achievements = [
   {
-    title: '1st Place — National Web Development Competition',
-    issuer: 'National Tech Summit / Informatics Olympiad',
+    title: '3rd Place — Student Skills Competition ( LKS ) in Web Technologies, Surabaya City Level',
+    issuer: 'Student Skills Competition',
+    period: '2026',
+    location: 'Indonesia',
+    credentialUrl: 'https://www.linkedin.com/in/fairuz-ar-rasyid-rabbani-0a47a2343/overlay/Certifications/759694144/treasury/?profileId=ACoAAFYUe_wBM-a0HP0MqAaynsDxOdzQAtMrAgA',
+  },
+  {
+    title: 'Memulai Pemograman dengan Python',
+    issuer: 'Dicoding Indonesia',
+    period: '2026',
+    location: 'Indonesia',
+    credentialUrl: 'https://www.dicoding.com/certificates/4EXG1VG4QPRL',
+  },
+  {
+    title: 'Belajar Dasar Pemograman Web',
+    issuer: 'Dicoding Indonesia',
     period: '2024',
     location: 'Indonesia',
-  },
-  {
-    title: 'Top 3 Finalist — Hackathon Innovation Challenge',
-    issuer: 'Tech Fest Indonesia',
-    period: '2023',
-    location: 'Jakarta, Indonesia',
-  },
-  {
-    title: 'Certified Fullstack Application Developer',
-    issuer: 'Professional Certification Authority',
-    period: '2023',
-    location: 'Indonesia',
+    credentialUrl: 'https://www.dicoding.com/certificates/N9ZOYW02YPG5',
   },
 ];
 
@@ -725,10 +721,10 @@ export default function Home() {
     { icon: glyph(Home01Icon), label: 'Home', onClick: scrollToTop },
     { icon: glyph(UserCircle02Icon), label: 'About', onClick: scrollToAboutSection },
     { icon: glyph(CodeIcon), label: 'Skills', onClick: scrollToSkills },
-    { icon: glyph(CodeFolderIcon), label: 'Projects', onClick: scrollToProjects },
-    { icon: glyph(Briefcase02Icon), label: 'Experience', onClick: scrollToExperience },
     { icon: glyph(Mortarboard02Icon), label: 'Education', onClick: scrollToEducation },
     { icon: glyph(Award01Icon), label: 'Achievements', onClick: scrollToAchievements },
+    { icon: glyph(Briefcase02Icon), label: 'Experience', onClick: scrollToExperience },
+    { icon: glyph(CodeFolderIcon), label: 'Projects', onClick: scrollToProjects },
     { icon: glyph(Presentation01Icon), label: 'Workshops', onClick: scrollToWorkshops },
     { icon: glyph(Layers01Icon), label: 'Services', onClick: scrollToServices },
     { icon: glyph(Mail01Icon), label: 'Contact', onClick: scrollToContact },
@@ -849,32 +845,41 @@ export default function Home() {
       <section
         ref={orangeSectionRef}
         id="about"
-        className="relative z-20 w-full min-h-[140vh] bg-[#120f17] text-white flex flex-col items-center justify-start pt-24 md:pt-32 pb-28 sm:pb-36 px-6 md:px-12 will-change-transform overflow-hidden"
+        className="relative z-20 w-full min-h-[140vh] bg-[#120f17] text-white flex flex-col items-center justify-start pt-24 md:pt-32 pb-28 sm:pb-36 px-6 md:px-12 overflow-clip"
       >
-        {/* Fullscreen Animated Grainient Background */}
-        <div className="absolute inset-0 z-0 pointer-events-auto">
-          <Grainient
-            colors={["#120f17", "#2a0f0a", "#9a3412", "#d95a00ff", "#ca4000ff"]}
-            angle={55}
-            flow={0.8}
-            silk={0.35}
-            grainAmount={0.08}
-            type="linear"
-            bands={1}
-            softness={1}
-            scale={1}
-            speed={1}
-            grainSize={1.2}
-            grainAnimated
-            contrast={1}
-            saturation={1}
-            variation={0}
-            interactive
-            stir={1}
-            clickSwirl
-            intro
-            lightMode={false}
-          />
+        {/* Fullscreen Animated Particles Background spanning About Me through Services */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
+            <Particles
+              particleColors={["#ffffff", "#ffffff", "#ffffff"]}
+              particleCount={200}
+              particleSpread={10}
+              speed={0.1}
+              particleBaseSize={100}
+              glow={0.5}
+              twinkle={0.3}
+              moveParticlesOnHover={false}
+              hoverEffect="parallax"
+              sizeRandomness={1}
+              shape="circle"
+              depthOfField={0}
+              connections={false}
+              connectionDistance={110}
+              particleHoverFactor={1}
+              hoverRadius={140}
+              drift="none"
+              driftSpeed={1}
+              alphaParticles={false}
+              disableRotation={false}
+              cameraDistance={20}
+              variation={0}
+              opacity={1}
+              clickBurst
+              intro
+              lightMode={false}
+              className="w-full h-full"
+            />
+          </div>
         </div>
 
         {/* Center About Me Showcase Content */}
@@ -1007,79 +1012,6 @@ I believe great software is more than just code, it's about solving real problem
           </div>
 
           {/* ======================================================== */}
-          {/* SECTION: FEATURED PROJECTS                               */}
-          {/* ======================================================== */}
-          <div
-            id="projects"
-            className="w-full max-w-6xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
-          >
-            {/* Header Badge & Title */}
-            <div className="flex flex-col items-center text-center mb-6 sm:mb-10 select-none">
-
-              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
-                FEATURED PROJECTS
-              </h3>
-            </div>
-
-            {/* Custom 3D Circular Arc Gallery */}
-            <CustomCircularGallery
-              projects={featuredProjects}
-              bend={3}
-            />
-          </div>
-
-          {/* ======================================================== */}
-          {/* SECTION: MY EXPERIENCE                                   */}
-          {/* ======================================================== */}
-          <div
-            id="experience"
-            className="w-full mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
-          >
-            {/* Header Badge & Title */}
-            <div className="flex flex-col items-center text-center mb-24 sm:mb-32 md:mb-44 select-none">
-              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
-                MY EXPERIENCE
-              </h3>
-            </div>
-
-            {/* Folder Animation Interactive Stage */}
-            <div className="w-full flex flex-col items-center justify-center min-h-[540px] sm:min-h-[600px] md:min-h-[680px] pt-6 sm:pt-12 pb-6 select-none overflow-visible">
-              <Folder
-                label="Experience"
-                items={experienceFolderItems}
-                mode="flap"
-                variant="solid"
-                layout="spread"
-                color="#ea580c"
-                paperColor="#ffffff"
-                tabPosition="right"
-                openOn="click"
-                size={folderSize}
-                cardScale={1.22}
-                frost={0.25}
-                tilt={0.5}
-                speed={1}
-                bounce={0.4}
-                peek
-                intro
-                draggable
-                zoomOnClick
-                theme="dark"
-                className="drop-shadow-2xl"
-              />
-
-              {/* Interaction hints */}
-              <p className="mt-8 text-white/50 text-xs sm:text-sm font-mono flex flex-wrap items-center justify-center gap-2 select-none">
-                <span> Click folder to open</span>
-                <span className="text-white/20">•</span>
-                <span> Click any card to zoom</span>
-                <span className="text-white/20">•</span>
-                <span> Drag cards freely</span>
-              </p>
-            </div>
-          </div>
-
-          {/* ======================================================== */}
           {/* SECTION: EDUCATION                                       */}
           {/* ======================================================== */}
           <div
@@ -1142,7 +1074,7 @@ I believe great software is more than just code, it's about solving real problem
               {achievements.map((item, index) => (
                 <div
                   key={index}
-                  className="group py-6 sm:py-8 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-6 hover:border-orange-500/40 transition-colors"
+                  className="group py-6 sm:py-8 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-6 hover:border-orange-500/40 transition-colors"
                 >
                   <div>
                     <h4 className="font-montserrat font-bold text-lg sm:text-xl md:text-2xl text-white group-hover:text-orange-400 transition-colors">
@@ -1159,8 +1091,25 @@ I believe great software is more than just code, it's about solving real problem
                     </p>
                   </div>
 
-                  <div className="text-xs sm:text-sm font-mono text-white/50 group-hover:text-orange-400/90 transition-colors whitespace-nowrap">
-                    {item.period}
+                  <div className="flex sm:flex-col items-start sm:items-end gap-1.5 sm:gap-2 shrink-0">
+                    <span className="text-xs sm:text-sm font-mono text-white/50 group-hover:text-orange-400/90 transition-colors whitespace-nowrap">
+                      {item.period}
+                    </span>
+                    {item.credentialUrl && (
+                      <a
+                        href={item.credentialUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono text-orange-400 hover:text-orange-300 transition-colors group/link"
+                      >
+                        <span>View Credential</span>
+                        <HugeiconsIcon
+                          icon={ArrowUpRight01Icon}
+                          size="1.1em"
+                          className="transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                        />
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1168,21 +1117,94 @@ I believe great software is more than just code, it's about solving real problem
           </div>
 
           {/* ======================================================== */}
-          {/* SECTION: WORKSHOPS                                       */}
+          {/* SECTION: MY EXPERIENCE                                   */}
           {/* ======================================================== */}
           <div
-            id="workshops"
-            className="w-full max-w-4xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
+            id="experience"
+            className="w-full mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
           >
-            {/* Header Title */}
-            <div className="flex flex-col items-center text-center mb-10 md:mb-14 select-none">
+            {/* Header Badge & Title */}
+            <div className="flex flex-col items-center text-center mb-24 sm:mb-32 md:mb-44 select-none">
               <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
-                WORKSHOPS
+                MY EXPERIENCE
               </h3>
             </div>
 
+            {/* Folder Animation Interactive Stage */}
+            <div className="w-full flex flex-col items-center justify-center min-h-[540px] sm:min-h-[600px] md:min-h-[680px] pt-6 sm:pt-12 pb-6 select-none overflow-visible">
+              <Folder
+                label="Experience"
+                items={experienceFolderItems}
+                mode="flap"
+                variant="solid"
+                layout="spread"
+                color="#ea580c"
+                paperColor="#ffffff"
+                tabPosition="right"
+                openOn="click"
+                size={folderSize}
+                cardScale={1.22}
+                frost={0.25}
+                tilt={0.5}
+                speed={1}
+                bounce={0.4}
+                peek
+                intro
+                draggable
+                zoomOnClick
+                theme="dark"
+                className="drop-shadow-2xl"
+              />
+
+              {/* Interaction hints */}
+              <p className="mt-8 text-white/50 text-xs sm:text-sm font-mono flex flex-wrap items-center justify-center gap-2 select-none">
+                <span> Click folder to open</span>
+                <span className="text-white/20">•</span>
+                <span> Click any card to zoom</span>
+                <span className="text-white/20">•</span>
+                <span> Drag cards freely</span>
+              </p>
+            </div>
+          </div>
+
+          {/* ======================================================== */}
+          {/* SECTION: FEATURED PROJECTS                               */}
+          {/* ======================================================== */}
+          <div
+            id="projects"
+            className="w-full max-w-6xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
+          >
+            {/* Header Badge & Title */}
+            <div className="flex flex-col items-center text-center mb-6 sm:mb-10 select-none">
+
+              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
+                FEATURED PROJECTS
+              </h3>
+            </div>
+
+            {/* Custom 3D Circular Arc Gallery */}
+            <CustomCircularGallery
+              projects={featuredProjects}
+              bend={3}
+            />
+          </div>
+
+          {/* ======================================================== */}
+          {/* SECTION: WORKSHOPS                                       */}
+          {/* ======================================================== */}
+          {/* <div
+            id="workshops"
+            className="w-full max-w-4xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
+          > */}
+            {/* Header Title */}
+            {/* <div className="flex flex-col items-center text-center mb-10 md:mb-14 select-none">
+              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
+                WORKSHOPS
+              </h3>
+            </div> */}
+
             {/* Simple Minimal List */}
-            <div className="w-full flex flex-col border-t border-white/15">
+            {/* <div className="w-full flex flex-col border-t border-white/15">
               {workshops.map((item, index) => (
                 <div
                   key={index}
@@ -1209,7 +1231,7 @@ I believe great software is more than just code, it's about solving real problem
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           {/* ======================================================== */}
           {/* SECTION: MY SERVICES                                     */}
@@ -1220,16 +1242,10 @@ I believe great software is more than just code, it's about solving real problem
           >
             {/* Header Badge & Title */}
             <div className="flex flex-col items-center text-center mb-12 sm:mb-16 select-none">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25 mb-4 shadow-xs">
-                <HugeiconsIcon icon={AiSparklesIcon} size="1.15em" />
-                <span>SOLUTIONS & SPECIALIZATIONS</span>
-              </div>
               <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
                 MY SERVICES
               </h3>
-              <p className="font-montserrat text-sm sm:text-base text-white/60 font-normal mt-4 max-w-xl text-center leading-relaxed">
-                Modern, reliable, and high-performance digital solutions tailored to solve complex challenges and craft memorable user experiences.
-              </p>
+  
             </div>
 
             {/* Services Grid with BorderGlow Cards (without picture) */}
@@ -1252,14 +1268,8 @@ I believe great software is more than just code, it's about solving real problem
                       <div>
                         {/* Top Bar: Icon + Category Badge + Number */}
                         <div className="flex items-center justify-between gap-3 mb-6">
-                          <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/90 group-hover:scale-105 group-hover:bg-white/[0.1] group-hover:border-white/20 transition-all duration-300 shadow-sm">
-                            <HugeiconsIcon icon={service.icon} size="1.4em" />
-                          </div>
 
                           <div className="flex items-center gap-2.5">
-                            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-medium tracking-wider bg-white/[0.05] border border-white/10 text-white/70">
-                              {service.badge}
-                            </span>
                             <span className="font-mono text-xs font-bold text-white/40">
                               {service.number}
                             </span>
@@ -1346,11 +1356,6 @@ I believe great software is more than just code, it's about solving real problem
           className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center will-change-transform"
         >
           {/* Availability Status Badge */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25 mb-4 sm:mb-6 shadow-sm">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>AVAILABLE FOR NEW OPPORTUNITIES • 2026</span>
-          </div>
-
           {/* Strong CTA Headline */}
           <h2 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center drop-shadow-md select-none max-w-4xl">
             LET&apos;S BUILD SOMETHING EXTRAORDINARY
@@ -1363,13 +1368,29 @@ I believe great software is more than just code, it's about solving real problem
 
           {/* Primary Action Button */}
           <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="mailto:fairuzcodes@gmail.com"
-              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-montserrat font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
+            <SpecularButton
+              size="lg"
+              radius={18}
+              tint="#ffffff"
+              tintOpacity={0.04}
+              textColor="#f5f5f5"
+              lineColor="#ffffff"
+              baseColor="#525252"
+              intensity={1}
+              idleIntensity={0.35}
+              shineSize={10}
+              shineFade={34}
+              thickness={1.2}
+              glow={1}
+              followMouse
+              proximity={250}
+              onClick={() => {
+                window.location.href = 'mailto:fairuzcodes@gmail.com';
+              }}
             >
               <HugeiconsIcon icon={Mail01Icon} size="1.2em" />
-              <span>Start a Conversation</span>
-            </a>
+              <span>Get Started</span>
+            </SpecularButton>
           </div>
 
           {/* Social Links Row */}
