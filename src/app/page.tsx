@@ -17,7 +17,6 @@ import LogoLoop from '@/components/LogoLoop';
 import Folder from '@/components/Folder';
 import CustomCircularGallery from '@/components/CustomCircularGallery';
 import BorderGlow from '@/components/BorderGlow';
-import SpecularButton from '@/components/SpecularButton';
 import {
   SiTailwindcss,
   SiJavascript,
@@ -30,12 +29,15 @@ import {
 } from 'react-icons/si';
 import { HugeiconsIcon } from '@hugeicons/react';
 import {
+  AiSparklesIcon,
   ArrowUpRight01Icon,
   Award01Icon,
+  Certificate01Icon,
   Briefcase02Icon,
   Calendar03Icon,
   CodeFolderIcon,
   CodeIcon,
+  Database01Icon,
   Delete02Icon,
   Github01Icon,
   Home01Icon,
@@ -130,8 +132,8 @@ const services = [
     badge: 'WEB APPS • ARCHITECTURE',
     icon: CodeIcon,
     description:
-      'Developing fullstack web applications using Laravel, building robust backend systems and responsive user interfaces tailored to business needs.',
-    tags: ['Laravel', 'Mysql', 'API', 'Tailwind CSS'],
+      'Designing & building scalable, reactive web applications with clean component architecture, server-side rendering, and responsive UI across all screens.',
+    tags: ['Next.js', 'React', 'Laravel', 'TypeScript', 'Tailwind CSS'],
   },
   {
     number: '02',
@@ -139,17 +141,26 @@ const services = [
     badge: 'MOTION • INTERACTION',
     icon: PaintBoardIcon,
     description:
-      'Creating modern, responsive websites to showcase products, promote services, and establish a professional brand identity that builds credibility and engages potential customers.',
-    tags: ['GSAP Motion', 'Tailwind CSS', 'React', 'Native'],
+      'Crafting distinctive digital identities with fluid micro-interactions, GSAP timeline choreographies, glassmorphic aesthetics, and seamless responsive layouts.',
+    tags: ['GSAP Motion', 'Figma', 'Tailwind CSS', 'WebGL', 'UI/UX Design'],
   },
   {
     number: '03',
-    title: 'AI Automation & RAG Chatbot Development',
-    badge: 'Automation • INTELLIGENCE',
+    title: 'Backend Systems & Cloud APIs',
+    badge: 'API • CLOUD • DEVOPS',
+    icon: Database01Icon,
+    description:
+      'Engineering high-throughput RESTful services, resilient database schemas, automated containerized workflows with Docker, and robust backend pipelines.',
+    tags: ['PHP', 'Laravel', 'Docker', 'MySQL', 'Nginx', 'REST APIs'],
+  },
+  {
+    number: '04',
+    title: 'Mobile Apps & AI Integration',
+    badge: 'MOBILE • INTELLIGENCE',
     icon: SmartPhone01Icon,
     description:
-      'Building AI-powered automation workflows and RAG-based chatbots that streamline business processes, deliver intelligent responses from custom knowledge sources, and improve operational efficiency.',
-    tags: ['RAG Chatbot', 'n8n', 'API Integration', 'Python', 'VectorDB'],
+      'Developing cross-platform mobile apps with Flutter, coupled with modern AI model integrations (Gemini API, OpenAI) for automated intelligent workflows.',
+    tags: ['Flutter', 'Dart', 'Gemini API', 'Python', 'Firebase'],
   },
 ];
 
@@ -253,9 +264,8 @@ function ExperienceLogo({ src, alt }: { src: string; alt: string }) {
 
   return (
     <div
-      className={`relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center ${
-        isSquare ? 'rounded-full overflow-hidden' : ''
-      }`}
+      className={`relative shrink-0 w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center ${isSquare ? 'rounded-full overflow-hidden' : ''
+        }`}
     >
       <Image
         src={src}
@@ -269,9 +279,8 @@ function ExperienceLogo({ src, alt }: { src: string; alt: string }) {
             setIsSquare(ratio >= 0.85 && ratio <= 1.15);
           }
         }}
-        className={`w-full h-full pointer-events-none ${
-          isSquare ? 'object-cover rounded-full' : 'object-contain'
-        }`}
+        className={`w-full h-full pointer-events-none ${isSquare ? 'object-cover rounded-full' : 'object-contain'
+          }`}
       />
     </div>
   );
@@ -398,21 +407,21 @@ const achievements = [
     issuer: 'Student Skills Competition',
     period: '2026',
     location: 'Indonesia',
-    credentialUrl: 'https://www.linkedin.com/in/fairuz-ar-rasyid-rabbani-0a47a2343/overlay/Certifications/759694144/treasury/?profileId=ACoAAFYUe_wBM-a0HP0MqAaynsDxOdzQAtMrAgA',
+    credentialUrl: '/credentials/cert_lks_surabaya.jpg',
   },
   {
-    title: 'Memulai Pemograman dengan Python',
-    issuer: 'Dicoding Indonesia',
-    period: '2026',
-    location: 'Indonesia',
-    credentialUrl: 'https://www.dicoding.com/certificates/4EXG1VG4QPRL',
+    title: 'Top 3 Finalist — Hackathon Innovation Challenge',
+    issuer: 'Tech Fest Indonesia',
+    period: '2023',
+    location: 'Jakarta, Indonesia',
+    credentialUrl: '/credentials/cert_hackathon.jpg',
   },
   {
-    title: 'Belajar Dasar Pemograman Web',
-    issuer: 'Dicoding Indonesia',
-    period: '2024',
+    title: 'Certified Fullstack Application Developer',
+    issuer: 'Professional Certification Authority',
+    period: '2023',
     location: 'Indonesia',
-    credentialUrl: 'https://www.dicoding.com/certificates/N9ZOYW02YPG5',
+    credentialUrl: '/credentials/cert_fullstack.jpg',
   },
 ];
 
@@ -441,28 +450,28 @@ const socialLinks = [
   {
     name: 'GitHub',
     handle: '@iruzcodes',
-    href: 'https://github.com/iruzcodes',
+    href: 'https://github.com/iruzz',
     icon: Github01Icon,
     badgeColor: 'hover:border-white/40 hover:text-white',
   },
   {
     name: 'Instagram',
-    handle: '@iruzcodes',
-    href: 'https://instagram.com/iruzcodes',
+    handle: '@ruzz_._',
+    href: 'https://www.instagram.com/ruzz_._?rpxt=YTNoZjJoMG03eWRm',
     icon: InstagramIcon,
     badgeColor: 'hover:border-pink-500/40 hover:text-pink-400',
   },
   {
     name: 'LinkedIn',
     handle: 'Fairuz Ar Rasyid',
-    href: 'https://linkedin.com/in/fairuz-ar-rasyid',
+    href: 'https://www.linkedin.com/in/fairuz-ar-rasyid-rabbani-0a47a2343/?isSelfProfile=true',
     icon: Linkedin01Icon,
     badgeColor: 'hover:border-sky-500/40 hover:text-sky-400',
   },
   {
     name: 'WhatsApp',
     handle: 'Direct Chat',
-    href: 'https://wa.me/',
+    href: 'https://wa.me/6285331132617',
     icon: WhatsappIcon,
     badgeColor: 'hover:border-emerald-500/40 hover:text-emerald-400',
   },
@@ -721,10 +730,10 @@ export default function Home() {
     { icon: glyph(Home01Icon), label: 'Home', onClick: scrollToTop },
     { icon: glyph(UserCircle02Icon), label: 'About', onClick: scrollToAboutSection },
     { icon: glyph(CodeIcon), label: 'Skills', onClick: scrollToSkills },
+    { icon: glyph(CodeFolderIcon), label: 'Projects', onClick: scrollToProjects },
+    { icon: glyph(Briefcase02Icon), label: 'Experience', onClick: scrollToExperience },
     { icon: glyph(Mortarboard02Icon), label: 'Education', onClick: scrollToEducation },
     { icon: glyph(Award01Icon), label: 'Achievements', onClick: scrollToAchievements },
-    { icon: glyph(Briefcase02Icon), label: 'Experience', onClick: scrollToExperience },
-    { icon: glyph(CodeFolderIcon), label: 'Projects', onClick: scrollToProjects },
     { icon: glyph(Presentation01Icon), label: 'Workshops', onClick: scrollToWorkshops },
     { icon: glyph(Layers01Icon), label: 'Services', onClick: scrollToServices },
     { icon: glyph(Mail01Icon), label: 'Contact', onClick: scrollToContact },
@@ -845,41 +854,38 @@ export default function Home() {
       <section
         ref={orangeSectionRef}
         id="about"
-        className="relative z-20 w-full min-h-[140vh] bg-[#120f17] text-white flex flex-col items-center justify-start pt-24 md:pt-32 pb-28 sm:pb-36 px-6 md:px-12 overflow-clip"
+        className="relative z-20 w-full min-h-[140vh] bg-[#120f17] text-white flex flex-col items-center justify-start pt-24 md:pt-32 pb-28 sm:pb-36 px-6 md:px-12 will-change-transform overflow-hidden"
       >
-        {/* Fullscreen Animated Particles Background spanning About Me through Services */}
-        <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="sticky top-0 left-0 w-full h-screen overflow-hidden pointer-events-none">
-            <Particles
-              particleColors={["#ffffff", "#ffffff", "#ffffff"]}
-              particleCount={200}
-              particleSpread={10}
-              speed={0.1}
-              particleBaseSize={100}
-              glow={0.5}
-              twinkle={0.3}
-              moveParticlesOnHover={false}
-              hoverEffect="parallax"
-              sizeRandomness={1}
-              shape="circle"
-              depthOfField={0}
-              connections={false}
-              connectionDistance={110}
-              particleHoverFactor={1}
-              hoverRadius={140}
-              drift="none"
-              driftSpeed={1}
-              alphaParticles={false}
-              disableRotation={false}
-              cameraDistance={20}
-              variation={0}
-              opacity={1}
-              clickBurst
-              intro
-              lightMode={false}
-              className="w-full h-full"
-            />
-          </div>
+        {/* Fullscreen Animated Particles Background */}
+        <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden">
+          <Particles
+            particleColors={["#ffffff", "#ffffff", "#ffffff"]}
+            particleCount={200}
+            particleSpread={10}
+            speed={0.1}
+            particleBaseSize={100}
+            glow={0.5}
+            twinkle={0.3}
+            moveParticlesOnHover={false}
+            hoverEffect="parallax"
+            sizeRandomness={1}
+            shape="circle"
+            depthOfField={0}
+            connections={false}
+            connectionDistance={110}
+            particleHoverFactor={1}
+            hoverRadius={140}
+            drift="none"
+            driftSpeed={1}
+            alphaParticles={false}
+            disableRotation={false}
+            cameraDistance={20}
+            variation={0}
+            opacity={1}
+            clickBurst
+            intro
+            lightMode={false}
+          />
         </div>
 
         {/* Center About Me Showcase Content */}
@@ -1012,6 +1018,79 @@ I believe great software is more than just code, it's about solving real problem
           </div>
 
           {/* ======================================================== */}
+          {/* SECTION: FEATURED PROJECTS                               */}
+          {/* ======================================================== */}
+          <div
+            id="projects"
+            className="w-full max-w-6xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
+          >
+            {/* Header Badge & Title */}
+            <div className="flex flex-col items-center text-center mb-6 sm:mb-10 select-none">
+
+              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
+                FEATURED PROJECTS
+              </h3>
+            </div>
+
+            {/* Custom 3D Circular Arc Gallery */}
+            <CustomCircularGallery
+              projects={featuredProjects}
+              bend={3}
+            />
+          </div>
+
+          {/* ======================================================== */}
+          {/* SECTION: MY EXPERIENCE                                   */}
+          {/* ======================================================== */}
+          <div
+            id="experience"
+            className="w-full mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
+          >
+            {/* Header Badge & Title */}
+            <div className="flex flex-col items-center text-center mb-24 sm:mb-32 md:mb-44 select-none">
+              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
+                MY EXPERIENCE
+              </h3>
+            </div>
+
+            {/* Folder Animation Interactive Stage */}
+            <div className="w-full flex flex-col items-center justify-center min-h-[540px] sm:min-h-[600px] md:min-h-[680px] pt-6 sm:pt-12 pb-6 select-none overflow-visible">
+              <Folder
+                label="Experience"
+                items={experienceFolderItems}
+                mode="flap"
+                variant="solid"
+                layout="spread"
+                color="#ea580c"
+                paperColor="#ffffff"
+                tabPosition="right"
+                openOn="click"
+                size={folderSize}
+                cardScale={1.22}
+                frost={0.25}
+                tilt={0.5}
+                speed={1}
+                bounce={0.4}
+                peek
+                intro
+                draggable
+                zoomOnClick
+                theme="dark"
+                className="drop-shadow-2xl"
+              />
+
+              {/* Interaction hints */}
+              <p className="mt-8 text-white/50 text-xs sm:text-sm font-mono flex flex-wrap items-center justify-center gap-2 select-none">
+                <span> Click folder to open</span>
+                <span className="text-white/20">•</span>
+                <span> Click any card to zoom</span>
+                <span className="text-white/20">•</span>
+                <span> Drag cards freely</span>
+              </p>
+            </div>
+          </div>
+
+          {/* ======================================================== */}
           {/* SECTION: EDUCATION                                       */}
           {/* ======================================================== */}
           <div
@@ -1117,94 +1196,21 @@ I believe great software is more than just code, it's about solving real problem
           </div>
 
           {/* ======================================================== */}
-          {/* SECTION: MY EXPERIENCE                                   */}
-          {/* ======================================================== */}
-          <div
-            id="experience"
-            className="w-full mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
-          >
-            {/* Header Badge & Title */}
-            <div className="flex flex-col items-center text-center mb-24 sm:mb-32 md:mb-44 select-none">
-              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
-                MY EXPERIENCE
-              </h3>
-            </div>
-
-            {/* Folder Animation Interactive Stage */}
-            <div className="w-full flex flex-col items-center justify-center min-h-[540px] sm:min-h-[600px] md:min-h-[680px] pt-6 sm:pt-12 pb-6 select-none overflow-visible">
-              <Folder
-                label="Experience"
-                items={experienceFolderItems}
-                mode="flap"
-                variant="solid"
-                layout="spread"
-                color="#ea580c"
-                paperColor="#ffffff"
-                tabPosition="right"
-                openOn="click"
-                size={folderSize}
-                cardScale={1.22}
-                frost={0.25}
-                tilt={0.5}
-                speed={1}
-                bounce={0.4}
-                peek
-                intro
-                draggable
-                zoomOnClick
-                theme="dark"
-                className="drop-shadow-2xl"
-              />
-
-              {/* Interaction hints */}
-              <p className="mt-8 text-white/50 text-xs sm:text-sm font-mono flex flex-wrap items-center justify-center gap-2 select-none">
-                <span> Click folder to open</span>
-                <span className="text-white/20">•</span>
-                <span> Click any card to zoom</span>
-                <span className="text-white/20">•</span>
-                <span> Drag cards freely</span>
-              </p>
-            </div>
-          </div>
-
-          {/* ======================================================== */}
-          {/* SECTION: FEATURED PROJECTS                               */}
-          {/* ======================================================== */}
-          <div
-            id="projects"
-            className="w-full max-w-6xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
-          >
-            {/* Header Badge & Title */}
-            <div className="flex flex-col items-center text-center mb-6 sm:mb-10 select-none">
-
-              <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
-                FEATURED PROJECTS
-              </h3>
-            </div>
-
-            {/* Custom 3D Circular Arc Gallery */}
-            <CustomCircularGallery
-              projects={featuredProjects}
-              bend={3}
-            />
-          </div>
-
-          {/* ======================================================== */}
           {/* SECTION: WORKSHOPS                                       */}
           {/* ======================================================== */}
           {/* <div
             id="workshops"
             className="w-full max-w-4xl mt-28 md:mt-40 lg:mt-48 pt-8 flex flex-col items-center"
           > */}
-            {/* Header Title */}
-            {/* <div className="flex flex-col items-center text-center mb-10 md:mb-14 select-none">
+          {/* Header Title */}
+          {/* <div className="flex flex-col items-center text-center mb-10 md:mb-14 select-none">
               <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
                 WORKSHOPS
               </h3>
             </div> */}
 
-            {/* Simple Minimal List */}
-            {/* <div className="w-full flex flex-col border-t border-white/15">
+          {/* Simple Minimal List */}
+          {/* <div className="w-full flex flex-col border-t border-white/15">
               {workshops.map((item, index) => (
                 <div
                   key={index}
@@ -1242,10 +1248,16 @@ I believe great software is more than just code, it's about solving real problem
           >
             {/* Header Badge & Title */}
             <div className="flex flex-col items-center text-center mb-12 sm:mb-16 select-none">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25 mb-4 shadow-xs">
+                <HugeiconsIcon icon={AiSparklesIcon} size="1.15em" />
+                <span>SOLUTIONS & SPECIALIZATIONS</span>
+              </div>
               <h3 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center select-none drop-shadow-md">
                 MY SERVICES
               </h3>
-  
+              <p className="font-montserrat text-sm sm:text-base text-white/60 font-normal mt-4 max-w-xl text-center leading-relaxed">
+                Modern, reliable, and high-performance digital solutions tailored to solve complex challenges and craft memorable user experiences.
+              </p>
             </div>
 
             {/* Services Grid with BorderGlow Cards (without picture) */}
@@ -1268,8 +1280,14 @@ I believe great software is more than just code, it's about solving real problem
                       <div>
                         {/* Top Bar: Icon + Category Badge + Number */}
                         <div className="flex items-center justify-between gap-3 mb-6">
+                          <div className="w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/10 flex items-center justify-center text-white/90 group-hover:scale-105 group-hover:bg-white/[0.1] group-hover:border-white/20 transition-all duration-300 shadow-sm">
+                            <HugeiconsIcon icon={service.icon} size="1.4em" />
+                          </div>
 
                           <div className="flex items-center gap-2.5">
+                            <span className="px-3 py-1 rounded-full text-[11px] font-mono font-medium tracking-wider bg-white/[0.05] border border-white/10 text-white/70">
+                              {service.badge}
+                            </span>
                             <span className="font-mono text-xs font-bold text-white/40">
                               {service.number}
                             </span>
@@ -1356,6 +1374,11 @@ I believe great software is more than just code, it's about solving real problem
           className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center will-change-transform"
         >
           {/* Availability Status Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/25 mb-4 sm:mb-6 shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>AVAILABLE FOR NEW OPPORTUNITIES • 2026</span>
+          </div>
+
           {/* Strong CTA Headline */}
           <h2 className="font-rubik-maps text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.08] text-center drop-shadow-md select-none max-w-4xl">
             LET&apos;S BUILD SOMETHING EXTRAORDINARY
@@ -1368,29 +1391,13 @@ I believe great software is more than just code, it's about solving real problem
 
           {/* Primary Action Button */}
           <div className="mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-4">
-            <SpecularButton
-              size="lg"
-              radius={18}
-              tint="#ffffff"
-              tintOpacity={0.04}
-              textColor="#f5f5f5"
-              lineColor="#ffffff"
-              baseColor="#525252"
-              intensity={1}
-              idleIntensity={0.35}
-              shineSize={10}
-              shineFade={34}
-              thickness={1.2}
-              glow={1}
-              followMouse
-              proximity={250}
-              onClick={() => {
-                window.location.href = 'mailto:fairuzcodes@gmail.com';
-              }}
+            <a
+              href="mailto:fairuzcodes@gmail.com"
+              className="group relative inline-flex items-center gap-3 px-7 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-neutral-950 font-montserrat font-bold text-sm sm:text-base tracking-wide shadow-[0_0_30px_rgba(249,115,22,0.4)] hover:shadow-[0_0_50px_rgba(249,115,22,0.7)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer"
             >
               <HugeiconsIcon icon={Mail01Icon} size="1.2em" />
-              <span>Get Started</span>
-            </SpecularButton>
+              <span>Start a Conversation</span>
+            </a>
           </div>
 
           {/* Social Links Row */}
