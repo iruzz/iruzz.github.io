@@ -131,16 +131,16 @@ function GalleryCardItem({
 
         {/* Top Badges */}
         <div className="absolute top-3.5 inset-x-3.5 flex items-center justify-between z-10 pointer-events-none">
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-black/60 backdrop-blur-md text-orange-400 border border-white/10 shadow-xs truncate max-w-[150px]">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-black/80 sm:bg-black/60 sm:backdrop-blur-md text-orange-400 border border-white/10 shadow-xs truncate max-w-[150px]">
             {item.project.category}
           </span>
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono text-white/60 bg-black/50 backdrop-blur-md border border-white/5">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono text-white/60 bg-black/75 sm:bg-black/50 sm:backdrop-blur-md border border-white/5">
             {item.project.year}
           </span>
         </div>
 
         {/* Hover Action Overlay */}
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-250 flex items-center justify-center backdrop-blur-[2px] z-20">
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-250 flex items-center justify-center sm:backdrop-blur-[2px] z-20">
           <span className="px-3.5 py-1.5 rounded-full text-xs font-montserrat font-semibold bg-orange-500 text-white shadow-lg flex items-center gap-1.5 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-250">
             <span>View Project</span>
             <HugeiconsIcon icon={ArrowUpRight01Icon} size="1.1em" />
@@ -260,21 +260,24 @@ export default function CustomCircularGallery({
   };
 
   const handlePan = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (Math.abs(info.offset.y) > Math.abs(info.offset.x) * 1.25) {
+    // If the user is scrolling the page vertically, never hijack the gesture
+    if (!hasDraggedRef.current && Math.abs(info.offset.y) > 10) {
       return;
     }
-    if (Math.abs(info.offset.x) > 6) {
+    if (Math.abs(info.offset.y) > Math.abs(info.offset.x) * 0.8 && !hasDraggedRef.current) {
+      return;
+    }
+    if (Math.abs(info.offset.x) > 10) {
       hasDraggedRef.current = true;
     }
+    if (!hasDraggedRef.current) return;
     const newPos = dragStartPosRef.current - info.offset.x / 280;
     rawPosition.set(newPos);
   };
 
   const handlePanEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     isDraggingRef.current = false;
-    if (Math.abs(info.offset.y) > Math.abs(info.offset.x) * 1.25 && !hasDraggedRef.current) {
-      return;
-    }
+    if (!hasDraggedRef.current) return;
     const flick = -info.velocity.x * 0.0006;
     const target = Math.round(rawPosition.get() + flick);
     rawPosition.set(target);
@@ -339,8 +342,8 @@ export default function CustomCircularGallery({
         onPanEnd={handlePanEnd}
         style={{ perspective: '1100px' }}
       >
-        {/* Soft Ambient Radial Floor Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[340px] bg-orange-600/10 rounded-full blur-[100px] pointer-events-none" />
+        {/* Soft Ambient Radial Floor Glow - CSS gradient without GPU blur filter penalty */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(700px,94vw)] h-[320px] rounded-full pointer-events-none [background:radial-gradient(ellipse_at_center,rgba(249,115,22,0.12)_0%,rgba(249,115,22,0.03)_50%,transparent_75%)]" />
 
         {/* 3D Preserved Plane */}
         <div

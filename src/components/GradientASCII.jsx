@@ -450,6 +450,7 @@ const GradientASCII = ({
   lightMode = false,
   fontFamily = DEFAULT_FONT,
   dpr = undefined,
+  paused = false,
   className = '',
   style = undefined,
   ...rest
@@ -482,7 +483,8 @@ const GradientASCII = ({
     intro,
     lightMode,
     fontFamily: fontFamily || DEFAULT_FONT,
-    dpr
+    dpr,
+    paused
   };
   const settingsRef = useRef(settings);
 
@@ -729,7 +731,7 @@ const GradientASCII = ({
 
     const frame = now => {
       raf = 0;
-      if (disposed || !visible || document.hidden) return;
+      if (disposed || !visible || document.hidden || settingsRef.current.paused) return;
       const s = settingsRef.current;
       const dt = last ? clamp((now - last) / 1000, 0.001, 0.05) : 1 / 60;
       last = now;
@@ -746,12 +748,12 @@ const GradientASCII = ({
       updateInput(dt);
       draw();
       const busy = !reduce || introClock < 1 || clicks.length > 0 || trail.length > 0;
-      if (busy) raf = requestAnimationFrame(frame);
+      if (busy && !settingsRef.current.paused) raf = requestAnimationFrame(frame);
       else last = 0;
     };
 
     function wake() {
-      if (!raf && !disposed && visible && !document.hidden) raf = requestAnimationFrame(frame);
+      if (!raf && !disposed && visible && !document.hidden && !settingsRef.current.paused) raf = requestAnimationFrame(frame);
     }
 
     const locate = event => {
@@ -814,6 +816,12 @@ const GradientASCII = ({
     document.addEventListener('visibilitychange', onVisibility);
     resize();
     wakeRef.current = wake;
+    wakeRef.current.stop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
 
     return () => {
       disposed = true;
@@ -836,7 +844,11 @@ const GradientASCII = ({
 
   useEffect(() => {
     settingsRef.current = settings;
-    wakeRef.current?.();
+    if (settings.paused) {
+      wakeRef.current?.stop?.();
+    } else {
+      wakeRef.current?.();
+    }
   });
 
   return (

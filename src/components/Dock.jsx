@@ -16,7 +16,7 @@ const MARGIN = 8;
 const POP = 'cubic-bezier(0.2, 1.25, 0.4, 1)';
 
 const ROOT =
-  'fixed z-40 flex box-border gap-[var(--dock-gap)] p-[var(--dock-pad)] rounded-[calc(var(--dock-base)*var(--dock-round)*0.5_+_var(--dock-pad))] [background:var(--dock-panel)] [box-shadow:inset_0_0_0_1px_var(--dock-panel-edge),inset_0_1px_0_var(--dock-panel-highlight),var(--dock-panel-shadow)] backdrop-blur-[20px] backdrop-saturate-[1.6] touch-none [transition:translate_0.5s_cubic-bezier(0.22,1,0.36,1),opacity_0.2s_ease] data-[hidden]:pointer-events-none data-[hidden]:opacity-0 data-[hidden]:[transition:translate_0.36s_cubic-bezier(0.55,0,0.75,0.15),opacity_0.24s_ease_0.1s] motion-reduce:!transition-none before:absolute before:-z-10 before:hidden before:content-[""] hover:before:block';
+  'fixed z-40 flex box-border gap-[var(--dock-gap)] p-[var(--dock-pad)] rounded-[calc(var(--dock-base)*var(--dock-round)*0.5_+_var(--dock-pad))] [background:var(--dock-panel)] [box-shadow:inset_0_0_0_1px_var(--dock-panel-edge),inset_0_1px_0_var(--dock-panel-highlight),var(--dock-panel-shadow)] backdrop-blur-sm sm:backdrop-blur-[20px] sm:backdrop-saturate-[1.6] touch-none [transition:translate_0.5s_cubic-bezier(0.22,1,0.36,1),opacity_0.2s_ease] data-[hidden]:pointer-events-none data-[hidden]:opacity-0 data-[hidden]:[transition:translate_0.36s_cubic-bezier(0.55,0,0.75,0.15),opacity_0.24s_ease_0.1s] motion-reduce:!transition-none before:absolute before:-z-10 before:hidden before:content-[""] hover:before:block';
 
 const ROOT_SIDES = {
   bottom:

@@ -540,7 +540,10 @@ export default function Home() {
   const ctaContentRef = useRef<HTMLDivElement>(null);
   const [folderSize, setFolderSize] = useState(2.2);
   const [isMobile, setIsMobile] = useState(false);
+  const [isHeroVisible, setIsHeroVisible] = useState(true);
   const [isCtaVisible, setIsCtaVisible] = useState(false);
+  const isHeroVisibleRef = useRef(true);
+  const isCtaVisibleRef = useRef(false);
   const [selectedExperience, setSelectedExperience] = useState<ExperienceItem | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -561,6 +564,16 @@ export default function Home() {
       }
     };
     updateSize();
+
+    // If loaded or restored with existing scroll, synchronize initial Hero visibility
+    if (typeof window !== 'undefined' && window.scrollY > window.innerHeight * 0.95) {
+      isHeroVisibleRef.current = false;
+      setIsHeroVisible(false);
+      if (heroRef.current) {
+        heroRef.current.style.display = 'none';
+      }
+    }
+
     window.addEventListener('resize', updateSize);
     return () => window.removeEventListener('resize', updateSize);
   }, []);
@@ -593,18 +606,36 @@ export default function Home() {
 
       const mm = gsap.matchMedia(mainRef);
 
-      // ─── 1. MOBILE TIMELINE (<= 768px): ZERO blur/boxShadow lag, snappy 0.3 scrub, pure GPU transforms ───
+      // ─── 1. MOBILE TIMELINE (<= 768px): snappier scrub, unmount/pause offscreen Hero to completely save GPU ───
       mm.add('(max-width: 768px)', () => {
         const entryTl = gsap.timeline({
           scrollTrigger: {
             trigger: orangeSectionRef.current,
             start: 'top bottom',
             end: 'top top',
-            scrub: 0.3,
+            scrub: 0.25,
             invalidateOnRefresh: true,
+            onLeave: () => {
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 0, pointerEvents: 'none', display: 'none' });
+              if (isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = false;
+                setIsHeroVisible(false);
+              }
+            },
+            onEnterBack: () => {
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
+              if (!isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = true;
+                setIsHeroVisible(true);
+              }
+            },
             onLeaveBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto' });
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
               if (heroContentRef.current) gsap.set(heroContentRef.current, { scale: 1, y: 0, opacity: 1 });
+              if (!isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = true;
+                setIsHeroVisible(true);
+              }
             },
           },
         });
@@ -640,24 +671,36 @@ export default function Home() {
               trigger: ctaWrapperRef.current,
               start: 'top bottom',
               end: 'bottom bottom',
-              scrub: 0.3,
+              scrub: 0.25,
               invalidateOnRefresh: true,
               onEnter: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
-                setIsCtaVisible(true);
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                if (!isCtaVisibleRef.current) {
+                  isCtaVisibleRef.current = true;
+                  setIsCtaVisible(true);
+                }
               },
               onLeaveBack: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
-                setIsCtaVisible(false);
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                if (isCtaVisibleRef.current) {
+                  isCtaVisibleRef.current = false;
+                  setIsCtaVisible(false);
+                }
               },
               onUpdate: (self) => {
                 if (ctaSectionRef.current) {
                   if (self.progress > 0) {
-                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
-                    setIsCtaVisible(true);
+                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                    if (!isCtaVisibleRef.current) {
+                      isCtaVisibleRef.current = true;
+                      setIsCtaVisible(true);
+                    }
                   } else {
-                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
-                    setIsCtaVisible(false);
+                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                    if (isCtaVisibleRef.current) {
+                      isCtaVisibleRef.current = false;
+                      setIsCtaVisible(false);
+                    }
                   }
                 }
               },
@@ -682,9 +725,27 @@ export default function Home() {
             end: 'top top',
             scrub: 1.2,
             invalidateOnRefresh: true,
+            onLeave: () => {
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 0, pointerEvents: 'none', display: 'none' });
+              if (isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = false;
+                setIsHeroVisible(false);
+              }
+            },
+            onEnterBack: () => {
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
+              if (!isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = true;
+                setIsHeroVisible(true);
+              }
+            },
             onLeaveBack: () => {
-              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto' });
+              if (heroRef.current) gsap.set(heroRef.current, { autoAlpha: 1, pointerEvents: 'auto', display: 'flex' });
               if (heroContentRef.current) gsap.set(heroContentRef.current, { scale: 1, y: 0, opacity: 1 });
+              if (!isHeroVisibleRef.current) {
+                isHeroVisibleRef.current = true;
+                setIsHeroVisible(true);
+              }
             },
           },
         });
@@ -730,21 +791,33 @@ export default function Home() {
               scrub: 1.2,
               invalidateOnRefresh: true,
               onEnter: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
-                setIsCtaVisible(true);
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                if (!isCtaVisibleRef.current) {
+                  isCtaVisibleRef.current = true;
+                  setIsCtaVisible(true);
+                }
               },
               onLeaveBack: () => {
-                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
-                setIsCtaVisible(false);
+                if (ctaSectionRef.current) gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                if (isCtaVisibleRef.current) {
+                  isCtaVisibleRef.current = false;
+                  setIsCtaVisible(false);
+                }
               },
               onUpdate: (self) => {
                 if (ctaSectionRef.current) {
                   if (self.progress > 0) {
-                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto' });
-                    setIsCtaVisible(true);
+                    gsap.set(ctaSectionRef.current, { visibility: 'visible', pointerEvents: 'auto', display: 'flex' });
+                    if (!isCtaVisibleRef.current) {
+                      isCtaVisibleRef.current = true;
+                      setIsCtaVisible(true);
+                    }
                   } else {
-                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none' });
-                    setIsCtaVisible(false);
+                    gsap.set(ctaSectionRef.current, { visibility: 'hidden', pointerEvents: 'none', display: 'none' });
+                    if (isCtaVisibleRef.current) {
+                      isCtaVisibleRef.current = false;
+                      setIsCtaVisible(false);
+                    }
                   }
                 }
               },
@@ -916,23 +989,25 @@ export default function Home() {
             colors={["#2a0f0a", "#9a3412", "#f97316", "#f97316"]}
             shape="horizon"
             characters=" =+xX0S8#@"
-            cellSize={18}
-            density={0.8}
+            cellSize={isMobile ? 24 : 18}
+            density={isMobile ? 0.6 : 0.8}
             glyphOpacity={0.85}
-            glow={0.2}
+            glow={isMobile ? 0.15 : 0.2}
             depthOfField={0}
-            flicker={0.2}
+            flicker={isMobile ? 0.1 : 0.2}
             softness={0.5}
             scale={1}
             flow={0.5}
-            speed={1}
+            speed={isMobile ? 0.6 : 1}
             gradientOpacity={0.9}
-            grain={0.08}
+            grain={isMobile ? 0.04 : 0.08}
             variation={0}
             offsetY={0.20}
-            mouseInteraction
+            mouseInteraction={!isMobile}
             scrambleRadius={0.1}
-            clickEffect="wave"
+            clickEffect={isMobile ? "none" : "wave"}
+            dpr={isMobile ? 1 : undefined}
+            paused={!isHeroVisible}
             intro
             lightMode={false}
           />
@@ -941,7 +1016,7 @@ export default function Home() {
         {/* Hero Interactive Centerpiece: TextPressure + HalftoneReveal */}
         <div
           ref={heroContentRef}
-          className="relative -top-4 sm:-top-8 md:-top-12 z-10 w-full max-w-5xl px-4 py-4 sm:py-8 flex items-center justify-center will-change-transform"
+          className="relative -top-4 sm:-top-8 md:-top-12 z-10 w-full max-w-5xl px-4 py-4 sm:py-8 flex items-center justify-center md:will-change-transform"
         >
           {/* 'Hello!' Text positioned behind the picture */}
           {/* Desktop: Interactive TextPressure */}
@@ -972,7 +1047,7 @@ export default function Home() {
 
           {/* Mobile: Rubik Maps font (larger background centerpiece) */}
           <div className="md:hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center z-0 pointer-events-none select-none">
-            <span className="font-rubik-maps text-[clamp(6rem,29vw,11.5rem)] font-normal tracking-tight text-white uppercase text-center drop-shadow-[0_4px_36px_rgba(255,90,31,0.45)] leading-none whitespace-nowrap will-change-transform">
+            <span className="font-rubik-maps text-[clamp(6rem,29vw,11.5rem)] font-normal tracking-tight text-white uppercase text-center drop-shadow-[0_4px_36px_rgba(255,90,31,0.45)] leading-none whitespace-nowrap">
               Hello!
             </span>
           </div>
@@ -1026,10 +1101,10 @@ export default function Home() {
               particleColors={["#ffffff", "#ffffff", "#ffffff"]}
               particleCount={isMobile ? 35 : 180}
               particleSpread={isMobile ? 8 : 10}
-              speed={0.1}
+              speed={isMobile ? 0 : 0.1}
               particleBaseSize={isMobile ? 60 : 100}
               glow={isMobile ? 0.2 : 0.5}
-              twinkle={isMobile ? 0.15 : 0.3}
+              twinkle={isMobile ? 0 : 0.3}
               moveParticlesOnHover={false}
               hoverEffect={isMobile ? undefined : 'parallax'}
               sizeRandomness={1}
@@ -1050,6 +1125,8 @@ export default function Home() {
               intro
               lightMode={false}
               className="w-full h-full"
+              paused={isMobile}
+              pixelRatio={isMobile ? 1 : undefined}
             />
           </div>
         </div>
@@ -1057,7 +1134,7 @@ export default function Home() {
         {/* Center About Me Showcase Content */}
         <div
           ref={blankContentRef}
-          className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center my-auto will-change-transform"
+          className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center my-auto"
         >
           {/* Heading */}
           <h2 className="font-rubik-maps text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-normal tracking-wide text-white leading-[1.05] text-center mb-16 sm:mb-20 md:mb-24 lg:mb-28 select-none drop-shadow-md">
@@ -1118,7 +1195,7 @@ I believe great software is more than just code, it's about solving real problem
 
           {/* Tech Stack Marquee (LogoLoop) */}
           <div className="w-full mt-14 md:mt-20 py-4 flex flex-col items-center select-none">
-            <div className="relative w-full overflow-hidden py-3 [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
+            <div className="relative w-full overflow-hidden py-3 sm:[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
               <LogoLoop
                 logos={techLogos}
                 speed={80}
@@ -1503,7 +1580,7 @@ I believe great software is more than just code, it's about solving real problem
         ref={ctaSectionRef}
         id="contact"
         className="fixed inset-0 z-10 w-full h-screen bg-black text-white flex flex-col items-center justify-center overflow-y-auto sm:overflow-hidden py-12 sm:py-20 md:py-24 px-4 sm:px-6 select-none"
-        style={{ visibility: 'hidden', pointerEvents: 'none' }}
+        style={{ visibility: 'hidden', pointerEvents: 'none', display: 'none' }}
       >
         {/* Fullscreen Ambient Gradient ASCII Background - Mounted conditionally to preserve GPU when offscreen */}
         {isCtaVisible && (
@@ -1529,6 +1606,8 @@ I believe great software is more than just code, it's about solving real problem
               mouseInteraction={!isMobile}
               scrambleRadius={0.1}
               clickEffect={isMobile ? "none" : "wave"}
+              dpr={isMobile ? 1 : undefined}
+              paused={!isCtaVisible}
               intro
               lightMode={false}
             />
@@ -1541,7 +1620,7 @@ I believe great software is more than just code, it's about solving real problem
         {/* CTA Interactive Centerpiece */}
         <div
           ref={ctaContentRef}
-          className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center will-change-transform my-auto"
+          className="relative z-10 w-full max-w-5xl flex flex-col items-center text-center md:will-change-transform my-auto"
         >
           {/* Strong CTA Headline */}
           <h2 className="font-rubik-maps text-2xl sm:text-4xl md:text-6xl lg:text-7xl font-normal tracking-wide text-white leading-[1.12] sm:leading-[1.08] text-center drop-shadow-md select-none max-w-4xl">

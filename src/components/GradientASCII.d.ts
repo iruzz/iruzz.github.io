@@ -25,6 +25,7 @@ export interface GradientASCIIProps extends React.HTMLAttributes<HTMLDivElement>
   lightMode?: boolean;
   fontFamily?: string;
   dpr?: number;
+  paused?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }
