@@ -313,13 +313,14 @@ const ProfileCard = ({
       if (event.pointerType === 'mouse') aimAt(event);
     };
     const onMove = event => {
+      if (event.pointerType === 'touch' && !settingsRef.current.enableMobileTilt) return;
       if (event.pointerType === 'mouse' || event.pointerId === touchId) aimAt(event);
     };
     const onLeave = event => {
       if (event.pointerType === 'mouse') release();
     };
     const onDown = event => {
-      if (event.pointerType === 'mouse') return;
+      if (event.pointerType === 'mouse' || !settingsRef.current.enableMobileTilt) return;
       touchId = event.pointerId;
       aimAt(event);
     };

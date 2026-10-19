@@ -260,22 +260,25 @@ export default function CustomCircularGallery({
   };
 
   const handlePan = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    if (Math.abs(info.offset.x) > 6 || Math.abs(info.offset.y) > 6) {
+    if (Math.abs(info.offset.y) > Math.abs(info.offset.x) * 1.25) {
+      return;
+    }
+    if (Math.abs(info.offset.x) > 6) {
       hasDraggedRef.current = true;
     }
-    // 280px horizontal drag = 1 card distance
     const newPos = dragStartPosRef.current - info.offset.x / 280;
     rawPosition.set(newPos);
   };
 
   const handlePanEnd = (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     isDraggingRef.current = false;
-    // Flick inertia using drag velocity
+    if (Math.abs(info.offset.y) > Math.abs(info.offset.x) * 1.25 && !hasDraggedRef.current) {
+      return;
+    }
     const flick = -info.velocity.x * 0.0006;
     const target = Math.round(rawPosition.get() + flick);
     rawPosition.set(target);
 
-    // Reset drag threshold shortly after pointer release to allow click handlers to evaluate
     setTimeout(() => {
       hasDraggedRef.current = false;
     }, 80);
@@ -404,15 +407,16 @@ export default function CustomCircularGallery({
                   exit={{ opacity: 0, scale: 0.94, y: 16 }}
                   transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                   onClick={(e) => e.stopPropagation()}
-                  className="relative z-10 w-full max-w-3xl max-h-[88vh] flex flex-col rounded-3xl bg-[#14121a] border border-white/20 shadow-[0_30px_90px_rgba(0,0,0,0.95)] overflow-hidden"
+                  className="relative z-10 w-full max-w-3xl max-h-[88vh] flex flex-col rounded-3xl bg-white border border-neutral-200/90 shadow-[0_30px_90px_rgba(0,0,0,0.5),0_0_30px_rgba(234,88,12,0.1)] overflow-hidden text-neutral-900"
                 >
                   {/* Fixed Header Bar */}
-                  <div className="shrink-0 px-6 py-4 sm:px-8 sm:py-4.5 border-b border-white/10 bg-[#14121a] flex items-center justify-between z-20">
-                    <div className="flex items-center gap-3">
-                      <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-orange-500/15 text-orange-400 border border-orange-500/30">
+                  <div className="shrink-0 px-6 py-4 sm:px-8 sm:py-4.5 border-b border-neutral-100 bg-neutral-50/70 flex items-center justify-between z-20">
+                    <div className="flex items-center gap-2.5 text-xs font-mono">
+                      <span className="font-semibold text-neutral-700">
                         {selectedProject.category}
                       </span>
-                      <span className="text-xs font-mono text-white/50">
+                      <span className="text-neutral-300">•</span>
+                      <span className="text-neutral-500 font-medium">
                         {selectedProject.year}
                       </span>
                     </div>
@@ -421,40 +425,40 @@ export default function CustomCircularGallery({
                       type="button"
                       onClick={() => setSelectedProject(null)}
                       aria-label="Close modal"
-                      className="w-10 h-10 rounded-full bg-white/10 hover:bg-orange-500 hover:text-white text-white/90 transition-all border border-white/15 shadow-md flex items-center justify-center cursor-pointer active:scale-95"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 active:scale-95 text-neutral-500 hover:text-neutral-900 transition-all border border-neutral-200 shadow-xs flex items-center justify-center cursor-pointer"
                     >
-                      <HugeiconsIcon icon={Cancel01Icon} size="1.25em" />
+                      <HugeiconsIcon icon={Cancel01Icon} size="1.2em" />
                     </button>
                   </div>
 
                   {/* Scrollable Modal Body */}
-                  <div className="flex-1 overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6">
+                  <div className="flex-1 overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6 bg-white">
                     {/* Project Title & Tagline */}
                     <div>
-                      <h3 className="font-montserrat font-bold text-2xl sm:text-3xl text-white">
+                      <h3 className="font-montserrat font-bold text-2xl sm:text-3xl text-neutral-900">
                         {selectedProject.title}
                       </h3>
-                      <p className="font-montserrat text-sm sm:text-base text-orange-400 font-semibold mt-1">
+                      <p className="font-montserrat text-sm sm:text-base text-orange-600 font-medium mt-1">
                         {selectedProject.tagline}
                       </p>
                     </div>
 
                     {/* Multi-Image Screenshot Preview with Browser Chrome */}
                     <div className="w-full flex flex-col gap-3">
-                      <div className="w-full rounded-2xl overflow-hidden border border-white/15 bg-neutral-950 shadow-2xl relative">
+                      <div className="w-full rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-100 shadow-xl relative">
                         {/* Chrome Browser Navigation Bar */}
-                        <div className="px-4 py-2.5 bg-neutral-900 border-b border-white/10 flex items-center justify-between">
+                        <div className="px-4 py-2.5 bg-neutral-100 border-b border-neutral-200 flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <div className="w-3 h-3 rounded-full bg-[#ff5f56]" />
                             <div className="w-3 h-3 rounded-full bg-[#ffbd2e]" />
                             <div className="w-3 h-3 rounded-full bg-[#27c93f]" />
                           </div>
-                          <div className="px-4 py-0.5 rounded-md bg-black/50 border border-white/10 text-[11px] font-mono text-white/60 truncate max-w-[200px] sm:max-w-none">
+                          <div className="px-4 py-0.5 rounded-md bg-white border border-neutral-200 text-[11px] font-mono text-neutral-600 truncate max-w-[200px] sm:max-w-none shadow-xs">
                             {selectedProject.browserUrl || 'preview.dev'}
                           </div>
                           <div className="flex items-center gap-2">
                             {projectImages.length > 1 && (
-                              <span className="px-2.5 py-0.5 rounded-md bg-white/10 text-[10px] font-mono font-semibold text-orange-400">
+                              <span className="px-2.5 py-0.5 rounded-md bg-neutral-200/80 text-[10px] font-mono font-semibold text-orange-600">
                                 {activeImageIndex + 1} / {projectImages.length}
                               </span>
                             )}
@@ -462,7 +466,7 @@ export default function CustomCircularGallery({
                         </div>
 
                         {/* Screenshot Image Frame */}
-                        <div className="relative w-full aspect-[16/9] max-h-[340px] bg-neutral-950 overflow-hidden group">
+                        <div className="relative w-full aspect-[16/9] max-h-[340px] bg-neutral-900 overflow-hidden group">
                           <AnimatePresence mode="wait">
                             <motion.div
                               key={activeImageIndex}
@@ -493,7 +497,7 @@ export default function CustomCircularGallery({
                                   setActiveImageIndex((prev) => (prev - 1 + projectImages.length) % projectImages.length);
                                 }}
                                 aria-label="Previous screenshot"
-                                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-orange-500 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-pointer"
+                                className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-orange-600 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-pointer"
                               >
                                 <HugeiconsIcon icon={ArrowLeft01Icon} size="1.1em" />
                               </button>
@@ -505,7 +509,7 @@ export default function CustomCircularGallery({
                                   setActiveImageIndex((prev) => (prev + 1) % projectImages.length);
                                 }}
                                 aria-label="Next screenshot"
-                                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/70 hover:bg-orange-500 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-pointer"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-orange-600 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all shadow-xl active:scale-90 cursor-pointer"
                               >
                                 <HugeiconsIcon icon={ArrowRight01Icon} size="1.1em" />
                               </button>
@@ -546,8 +550,8 @@ export default function CustomCircularGallery({
                               onClick={() => setActiveImageIndex(idx)}
                               className={`relative w-20 sm:w-24 aspect-[16/9] rounded-lg overflow-hidden border-2 transition-all cursor-pointer shrink-0 ${
                                 activeImageIndex === idx
-                                  ? 'border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.6)] scale-[1.03]'
-                                  : 'border-white/15 opacity-60 hover:opacity-100 hover:border-white/40'
+                                  ? 'border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-[1.03]'
+                                  : 'border-neutral-200 opacity-60 hover:opacity-100 hover:border-neutral-400'
                               }`}
                             >
                               <Image src={img} alt="" fill className="object-cover object-top" sizes="120px" />
@@ -559,28 +563,25 @@ export default function CustomCircularGallery({
 
                     {/* Project Description */}
                     <div>
-                      <h4 className="text-xs font-mono uppercase tracking-wider text-orange-400 font-semibold mb-2">
+                      <h4 className="text-xs font-mono uppercase tracking-wider text-orange-600 font-bold mb-2">
                         Project Overview
                       </h4>
-                      <p className="font-montserrat text-sm sm:text-base text-neutral-200 leading-relaxed font-normal">
+                      <p className="font-montserrat text-sm sm:text-base text-neutral-700 leading-relaxed font-normal">
                         {selectedProject.description}
                       </p>
                     </div>
 
-                    {/* Key Metrics Grid */}
-                    
-
                     {/* Tech Stack Pills */}
                     {selectedProject.technologies && selectedProject.technologies.length > 0 && (
                       <div>
-                        <h4 className="text-xs font-mono uppercase tracking-wider text-orange-400 font-semibold mb-3">
+                        <h4 className="text-xs font-mono uppercase tracking-wider text-neutral-500 font-bold mb-3">
                           Technologies & Stack
                         </h4>
                         <div className="flex flex-wrap gap-2">
                           {selectedProject.technologies.map((tech, idx) => (
                             <span
                               key={idx}
-                              className="px-3 py-1 text-xs font-mono rounded-lg bg-white/5 border border-white/10 text-white/80"
+                              className="px-3 py-1 text-xs font-mono rounded-lg bg-neutral-100 border border-neutral-200/80 text-neutral-800 font-medium"
                             >
                               {tech}
                             </span>
@@ -592,7 +593,7 @@ export default function CustomCircularGallery({
                   </div>
 
                   {/* Fixed Footer Bar */}
-                  <div className="shrink-0 px-6 py-4 sm:px-8 border-t border-white/10 bg-[#14121a] flex flex-wrap sm:flex-nowrap items-center gap-3 z-20">
+                  <div className="shrink-0 px-6 py-4 sm:px-8 border-t border-neutral-100 bg-neutral-50/70 flex flex-wrap sm:flex-nowrap items-center gap-3 z-20">
                     {selectedProject.liveUrl && (
                       <motion.a
                         href={selectedProject.liveUrl}
@@ -600,7 +601,7 @@ export default function CustomCircularGallery({
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-montserrat font-semibold text-sm shadow-[0_0_25px_rgba(249,115,22,0.4)] transition-all cursor-pointer"
+                        className="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-montserrat font-semibold text-sm shadow-md transition-all cursor-pointer"
                       >
                         <span>Live Preview</span>
                         <HugeiconsIcon icon={ArrowUpRight01Icon} size="1.2em" />
@@ -614,7 +615,7 @@ export default function CustomCircularGallery({
                         rel="noopener noreferrer"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/15 text-white font-montserrat font-semibold text-sm transition-all cursor-pointer"
+                        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-neutral-900 hover:bg-orange-600 text-white font-montserrat font-semibold text-sm shadow-md transition-all cursor-pointer"
                       >
                         <SiGithub className="text-base" />
                         <span>Source Code</span>
@@ -624,7 +625,7 @@ export default function CustomCircularGallery({
                     <button
                       type="button"
                       onClick={() => setSelectedProject(null)}
-                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/70 hover:text-white font-montserrat font-medium text-sm transition-all cursor-pointer"
+                      className="w-full sm:w-auto px-5 py-3 rounded-xl bg-neutral-100 hover:bg-neutral-200 border border-neutral-200 text-neutral-800 font-montserrat font-semibold text-sm transition-all cursor-pointer active:scale-95"
                     >
                       Close
                     </button>

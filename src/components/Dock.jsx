@@ -20,7 +20,7 @@ const ROOT =
 
 const ROOT_SIDES = {
   bottom:
-    'bottom-6 left-1/2 h-[var(--dock-thickness)] items-end [transform:translateX(-50%)] data-[hidden]:[translate:0_calc(100%_+_24px)] before:inset-x-0 before:bottom-full before:h-[calc(var(--dock-reach)_+_8px)]',
+    'bottom-4 sm:bottom-6 left-1/2 h-[var(--dock-thickness)] items-end [transform:translateX(-50%)] max-w-[calc(100vw-24px)] data-[hidden]:[translate:0_calc(100%_+_24px)] before:inset-x-0 before:bottom-full before:h-[calc(var(--dock-reach)_+_8px)]',
   top: 'top-6 left-1/2 h-[var(--dock-thickness)] items-start [transform:translateX(-50%)] data-[hidden]:[translate:0_calc(-100%_-_24px)] before:inset-x-0 before:top-full before:h-[calc(var(--dock-reach)_+_8px)]',
   left: 'left-6 top-1/2 w-[var(--dock-thickness)] flex-col items-start [transform:translateY(-50%)] data-[hidden]:[translate:calc(-100%_-_24px)_0] before:inset-y-0 before:left-full before:w-[calc(var(--dock-reach)_+_8px)]',
   right:
@@ -83,13 +83,13 @@ const MENU_SHAPE =
 
 const MENU_PATH = '[fill:var(--dock-menu)] [stroke:var(--dock-menu-edge)] [stroke-width:1px]';
 
-const MENU_LIST = 'relative box-border flex min-w-[172px] max-w-[280px] flex-col p-[5px] outline-none';
+const MENU_LIST = 'relative box-border flex min-w-[190px] max-w-[300px] flex-col p-[6px] outline-none';
 
 const MENU_HIGHLIGHT =
   'pointer-events-none absolute left-[5px] right-[5px] top-0 h-6 rounded-md opacity-0 [background:var(--dock-accent)] [transition:transform_0.16s_cubic-bezier(0.3,0.8,0.3,1),height_0.16s_cubic-bezier(0.3,0.8,0.3,1),opacity_0.12s_ease] motion-reduce:!transition-none';
 
 const MENU_ROW =
-  'relative m-0 box-border flex h-6 w-full cursor-default items-center gap-[5px] whitespace-nowrap rounded-md border-0 bg-transparent pl-[7px] pr-2.5 text-left outline-none [-webkit-tap-highlight-color:transparent] [font:inherit]';
+  'relative m-0 box-border flex h-8 w-full cursor-default items-center gap-2.5 whitespace-nowrap rounded-lg border-0 bg-transparent px-3 text-left outline-none [-webkit-tap-highlight-color:transparent] [font:inherit] transition-colors';
 
 const MENU_SEPARATOR = 'mx-2.5 my-[5px] h-px flex-none [background:var(--dock-menu-separator)]';
 
@@ -472,11 +472,11 @@ function DockMenu({
                     </span>
                   ) : null}
                   {row.icon ? (
-                    <span className="mr-px flex flex-none items-center justify-center text-[15px]">{row.icon}</span>
+                    <span className="mr-1 flex flex-none items-center justify-center text-[15px] opacity-85">{row.icon}</span>
                   ) : null}
-                  <span className="min-w-0 flex-1 overflow-hidden text-ellipsis">{row.label}</span>
+                  <span className="min-w-0 flex-1 overflow-hidden text-ellipsis font-montserrat text-xs font-medium">{row.label}</span>
                   {row.shortcut ? (
-                    <span className={`ml-[18px] flex-none ${lit ? 'text-white/70' : MUTED}`}>{row.shortcut}</span>
+                    <span className={`ml-[18px] flex-none font-mono text-[11px] ${lit ? 'text-white/80' : MUTED}`}>{row.shortcut}</span>
                   ) : null}
                   {submenu ? (
                     <span className={`ml-[14px] flex flex-none ${lit ? 'text-inherit' : MUTED}`}>
@@ -829,6 +829,7 @@ export default function Dock({
       if (!root.contains(event.relatedTarget)) hideLater();
     };
     const onWindowMove = event => {
+      if (event.pointerType === 'touch') return;
       const s = settingsRef.current;
       if (!s.autoHide || pointer.inside) return;
       let host = root.offsetParent;
@@ -1079,7 +1080,15 @@ export default function Dock({
                 return;
               }
               actionsRef.current?.hop(index);
-              item.onClick?.();
+              if (item.menu?.length) {
+                if (menuRef.current?.index === index && !menuRef.current?.closing) {
+                  closeMenu(false);
+                } else {
+                  openMenu(index, 'pointer');
+                }
+              } else {
+                item.onClick?.();
+              }
             }}
             onFocus={event => {
               if (event.currentTarget.matches(':focus-visible')) actionsRef.current?.focus(index);

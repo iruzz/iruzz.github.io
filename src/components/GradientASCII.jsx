@@ -765,6 +765,7 @@ const GradientASCII = ({
     };
 
     const onPointerMove = event => {
+      if (event.pointerType === 'touch') return;
       locate(event);
       const s = settingsRef.current;
       if (!pointer.inside || !s.mouseInteraction || reduce) return;
@@ -784,6 +785,7 @@ const GradientASCII = ({
     };
 
     const onPointerDown = event => {
+      if (event.pointerType === 'touch') return;
       locate(event);
       const s = settingsRef.current;
       if (!pointer.inside || !s.clickEffect || reduce) return;

@@ -378,6 +378,7 @@ const SpecularButton = ({
     };
 
     const onPointerMove = event => {
+      if (event.pointerType === 'touch') return;
       pointer.x = event.clientX;
       pointer.y = event.clientY;
       pointer.known = true;

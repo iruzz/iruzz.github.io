@@ -1,12 +1,24 @@
 import React from 'react';
 
+export interface DockMenuItem {
+  label: string;
+  onClick?: () => void;
+  separator?: boolean;
+  icon?: React.ReactNode;
+  shortcut?: string;
+  disabled?: boolean;
+  checked?: boolean;
+  items?: DockMenuItem[];
+}
+
 export interface DockItem {
   icon: React.ReactNode;
   label?: string;
   onClick?: () => void;
   badge?: number | boolean;
   active?: boolean;
-  menu?: Array<{ label: string; onClick?: () => void; separator?: boolean }>;
+  className?: string;
+  menu?: DockMenuItem[];
 }
 
 export interface DockProps {
@@ -34,3 +46,4 @@ export interface DockProps {
 
 declare const Dock: React.FC<DockProps>;
 export default Dock;
+

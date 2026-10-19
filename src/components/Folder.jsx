@@ -896,6 +896,7 @@ const Folder = ({
   open = undefined,
   defaultOpen = false,
   onOpenChange = undefined,
+  /** @type {((item: any, index: number) => void) | undefined} */
   onItemClick = undefined,
   onItemDrop = undefined,
   draggable = true,

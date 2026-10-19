@@ -814,11 +814,13 @@ const Particles = ({
     };
 
     const onPointerMove = event => {
+      if (event.pointerType === 'touch') return;
       locate(event);
       if (!settingsRef.current.paused) wake();
     };
 
     const onPointerDown = event => {
+      if (event.pointerType === 'touch') return;
       const s = settingsRef.current;
       locate(event);
       if (!pointer.inside || !s.clickBurst || s.paused || reduce) return;

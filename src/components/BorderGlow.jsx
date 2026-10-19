@@ -110,6 +110,7 @@ const BorderGlow = ({
   }, [getCenterOfElement]);
 
   const handlePointerMove = useCallback((e) => {
+    if (e.pointerType === 'touch') return;
     const card = cardRef.current;
     if (!card) return;
     const rect = card.getBoundingClientRect();
